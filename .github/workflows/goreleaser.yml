@@ -1,7 +1,8 @@
 name: goreleaser
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - main
 
@@ -11,6 +12,7 @@ permissions:
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     env:
       TAG_VERSION: $(make app-version)
       TAG_EXIST: false
