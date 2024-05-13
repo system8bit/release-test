@@ -7,5 +7,5 @@ import (
 )
 
 func main() {
-	fmt.Printf("%s\n", release_test.Version)
+	fmt.Printf("Version %s\n", release_test.Version)
 }
