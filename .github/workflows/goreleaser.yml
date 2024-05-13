@@ -22,12 +22,14 @@ jobs:
         uses: actions/setup-go@v4
       - name: Tag New Version
         run: |
-          if git tag -l $env.TAG_VERSION; then
+          echo "TAG_VERSION=$TAG_VERSION"
+          echo "TAG_EXIST=$TAG_EXIST"
+          if git tag -l $TAG_VERSION; then
             echo "Tag $TAG_VERSION already exists"
             env.TAG_EXIST=true
           else
-            git tag $env.TAG_VERSION
-            git push origin $env.TAG_VERSION
+            git tag $TAG_VERSION
+            git push origin $TAG_VERSION
           fi
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v5
