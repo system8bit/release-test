@@ -1,3 +1,3 @@
 package release_test
 
-const Version = "v1.0.6"
+const Version = "v1.0.7"
