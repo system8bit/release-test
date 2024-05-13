@@ -19,10 +19,16 @@ jobs:
         uses: actions/setup-go@v4
       - name: Tag New Version
         run: |
-          git tag $(make app-version)
-          git push origin $(make app-version)
+          if git tag -l $TAG_VERSION; then
+            echo "Tag $TAG_VERSION already exists"
+            TAG_EXIST=true
+          else
+            git tag $TAG_VERSION
+            git push origin $TAG_VERSION
+          fi
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v5
+        if: ${{ env.TAG_EXIST != 'true' }}
         with:
           # either 'goreleaser' (default) or 'goreleaser-pro'
           distribution: goreleaser
