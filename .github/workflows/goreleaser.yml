@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-go@v4
       - name: Tag New Version
         run: |
-          if -z $(git tag -l ${{ env.TAG_VERSION }}); then
+          if git show-ref --tags "refs/tags/${{ env.TAG_VERSION }}" >/dev/null 2>&1); then
             echo "Tag ${{ env.TAG_VERSION }} already exists"
             echo "TAG_EXIST=true" >> $GITHUB_ENV
           else
