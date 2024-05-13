@@ -10,6 +10,9 @@ permissions:
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
+    env:
+      TAG_VERSION: $(make app-version)
+      TAG_EXIST: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
