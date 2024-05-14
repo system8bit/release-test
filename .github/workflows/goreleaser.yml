@@ -1,7 +1,7 @@
 name: goreleaser
 
 on:
-  pull_request:
+  pull_request: # only run on merged PRs
     types: [closed]
     branches:
       - main
@@ -12,7 +12,7 @@ permissions:
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true # only run on merged PRs
     env:
       TAG_VERSION: $(make app-version)
       TAG_EXIST: false
@@ -25,16 +25,16 @@ jobs:
         uses: actions/setup-go@v4
       - name: Tag New Version
         run: |
-          if git show-ref --tags "refs/tags/${{ env.TAG_VERSION }}" >/dev/null 2>&1; then
+          if git show-ref --tags "refs/tags/${{ env.TAG_VERSION }}" >/dev/null 2>&1; then # check if tag exists
             echo "Tag ${{ env.TAG_VERSION }} already exists"
-            echo "TAG_EXIST=true" >> $GITHUB_ENV
+            echo "TAG_EXIST=true" >> $GITHUB_ENV # set TAG_EXIST to true, skip releasing
           else
-            git tag ${{ env.TAG_VERSION }}
+            git tag ${{ env.TAG_VERSION }} # create a new tag
             git push origin ${{ env.TAG_VERSION }}
           fi
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v5
-        if: ${{ env.TAG_EXIST != 'true' }}
+        if: ${{ env.TAG_EXIST != 'true' }} # only run if tag does not exist
         with:
           # either 'goreleaser' (default) or 'goreleaser-pro'
           distribution: goreleaser
